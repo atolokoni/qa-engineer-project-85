@@ -1,22 +1,5 @@
 ---
 - summary: |
-    Краткое описание тест-кейса. Пример: Проверка входа пользователя с существующими логином и паролем
-  requirement: |
-    Тестируемое требование. Например: При верном вводе логине и пароля пользователь должен войти в систему
-  prerequisites: |
-    Это условия, которые необходимы для проведения тест-кейса. Они должны быть выполнены еще до запуска тест-кейса.
-    Например: открыта страница логина
-  test-data: |
-    Тестовые данные
-    Логин = ilona Пароль = password
-  steps:
-    - Вводим логин
-    - Вводим пароль
-    - Нажимаем кнопку «Войти»
-  expected-result: |
-    Пользователь должен попасть на главную страницу
-
-- summary: |
     Проверка регистрации пользователя с корректными данными
   requirement: |
     При вводе корректных данных пользователь должен быть зарегестрирован и войти в систему
@@ -31,6 +14,51 @@
     - Нажимаем 'Sign up'
   expected-result: |
     Пользователь зарегестрирован, вошел в систему и перенаправлен на главную страницу
+
+- summary: |
+    Проверка входа пользователя с существующими логином и паролем
+  requirement: |
+    При введении корректных данных пользователь должен войти в учетную запись
+  prerequisites:
+    Открыта страница 'Sign in'
+  test-data: |
+    email = anna@gmail.com, password = annaannaanna
+  steps:
+    - Вводим email
+    - Вводим password
+    - Нажимаем 'Submit'
+  expected-result: |
+    Пользователь авторизован, произошел редирект на главную страницу
+
+- summary: |
+    Проверка входа пользователя с неверным паролем
+  requirement: |
+    При неправильном пароле пользователь должен получить сообщение об ошибке
+  prerequisites:
+    Открыта страница логина
+  test-data: |
+    email = anna@gmail.com, password = annaanna
+  steps:
+    - Вводим email
+    - Вводим password
+    - Нажимаем 'Submit'
+  expected-result: |
+    Пользователь должен получить уведомление о неверно введенном пароле
+
+- summary: |
+    Проверка входа пользователя с несуществующим логином
+  requirement: |
+    При неправильном логине или пароле пользователь должен получить сообщение об ошибке
+  prerequisites:
+    Открыта страница логина
+  test-data: |
+    email = annaanna@gmail.com, password = annaannaanna
+  steps:
+    - Вводим email
+    - Вводим password
+    - Нажимаем 'Submit'
+  expected-result: |
+    Пользователь должен получить уведомление о неверно введенной почте
 
 - summary: |
     Проверка навигации
@@ -239,21 +267,7 @@
     Произошел редирект на GitHub и Discord для привязки аккаунта
 
 - summary: |
-    Проверка добавления Task
-  requirement: |
-    Добавление Task происходит корректно
-  prerequisites:
-    Открыта страница 'tasks', пользователь авторизован
-  test-data: |
-    
-  steps:
-    - Нажимаем 'Create new Task'
-    - В поле 'Enter name' вводим 'aaaaa'
-    - В поле 'Description' вводим 'aaaaa'
-  expected-result: |
-
-- summary: |
-    Проверка просмотра уже добавленного Task
+    Проверка просмотра заданий
   requirement: |
     Просмотр Task доступен и корректно отображается
   prerequisites:
@@ -265,32 +279,6 @@
     - Нажимаем 'Status'
   expected-result: |
     Задание 'base_n' отображается корректно
-
-- summary: |
-    Проверка добавления Task pack
-  requirement: |
-    
-  prerequisites:
-    Открыта страница 'tasks', пользователь авторизован
-  test-data: |
-    
-  steps:
-    - 
-  expected-result: |
-
-
-- summary: |
-    Проверка отображения Task packs
-  requirement: |
-    Список Task packs отображается корректно
-  prerequisites:
-    Открыта страница 'tasks', пользователь авторизован
-  test-data: |
-    Нет данных
-  steps:
-    - Нажимаем 'Task packs'
-  expected-result: |
-    Список Task packs отображается корректно
 
 - summary: |
     Создание нового соревнования
@@ -423,13 +411,38 @@
     Пользователь удален из списка участников
 
 - summary: |
-    
+    Проверка создания игры
   requirement: |
-    
+    Авторизованный пользователь может создать игру
   prerequisites:
-    
+    Пользователь авторизован, открыта главная страница
   test-data: |
-    
+    Нет данных
   steps:
-    - 
+    - Нажимаем 'Create a game'
+    - Выбираем 'Game type' 'With a bot'
+    - В поле 'Choose task by name or tags' выбираем 'rect_area'
+    - Нажимаем 'create battle'
   expected-result: |
+    Игра создана и запущена
+
+- summary: |
+    Проверка прохождения игры
+  requirement: |
+    Пользователь может завершить игру, предложив свое решение
+  prerequisites:
+    Пользователь авторизован, запущена игра 'rect_area' с ботом
+  test-data: |
+    solution = {const _ = require("lodash");
+const R = require("rambda");
+
+const solution = (width, length) => {
+  return width * length;
+};
+
+module.exports = solution;}
+  steps:
+    - В поле для решения вводим solution
+    - Нажимаем 'Check solution'
+  expected-result: |
+    Игра завершена, пользователь получает сообщение о победе
